@@ -10,25 +10,23 @@ logging.getLogger("opencv_auto_source").addHandler(logging.NullHandler())
 
 
 class autoSelectSource:
-    """A class to check and rank available webcams.
+    """A class to check and rank available webcams."""
 
-    Attributes:
-        ATTEMPT_RESOLUTION: An integer representing the desired resolution to try.
-        MAX_SOURCE_COUNT: An integer representing the maximum number of sources to check.
-        source_results: A list of dictionaries containing the results of checking each source.
-    """
+    def __init__(self, MAX_SOURCE_COUNT=10):
+        """Initializes the checkWebcam object with default values.
 
-    def __init__(self):
-        """Initializes the checkWebcam object with default values."""
+        Args:
+            MAX_SOURCE_COUNT (int, optional): Number of sources to check. More sources means the code takes longer to run. Defaults to 10.
+        """
         self.ATTEMPT_RESOLUTION = 10000
-        self.MAX_SOURCE_COUNT = 10
+        self.MAX_SOURCE_COUNT = MAX_SOURCE_COUNT
         self.source_results = []
 
-    def check_webcams(self):
+    def check_webcams(self) -> list:
         """Checks the availability and quality of each webcam source.
 
         Returns:
-            A list of dictionaries containing the results of checking each source.
+            list: A list of dictionaries containing the results of checking each source.
             Each dictionary has the following keys:
                 id: An integer representing the source id.
                 active: A boolean indicating whether the source is active or not.
@@ -84,11 +82,11 @@ class autoSelectSource:
 
         return self.source_results
 
-    def rank_sources(self):
+    def rank_sources(self) -> dict:
         """Ranks the available webcam sources based on their quality.
 
         Returns:
-            A dictionary containing the best source and its attributes.
+            dict: A dictionary containing the best source and its attributes.
         """
         self.check_webcams()
 
@@ -110,11 +108,11 @@ class autoSelectSource:
 
         return best_source
 
-    def get_best_source(self):
+    def get_best_source(self) -> cv2.VideoCapture:
         """Gets the best webcam source and opens it.
 
         Returns:
-            A cv2.VideoCapture object representing the best webcam source.
+            cv2.VideoCapture: A cv2.VideoCapture object representing the best webcam source.
         """
         best_source = self.rank_sources()
 
@@ -123,3 +121,8 @@ class autoSelectSource:
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, best_source["width"])
 
         return cap
+
+
+A = autoSelectSource().check_webcams()
+
+print(A)
