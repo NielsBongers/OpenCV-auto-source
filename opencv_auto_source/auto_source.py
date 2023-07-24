@@ -39,6 +39,7 @@ class autoSelectSource:
         for source_id in range(0, self.MAX_SOURCE_COUNT):
             check_results = {}
 
+            # TODO: consider looping until successful, with some maximum number of attempts.
             cap = cv2.VideoCapture(source_id)
             webcam_active = cap.isOpened()
 
