@@ -1,0 +1,9 @@
+pyproject.toml
+setup.cfg
+opencv_auto_source/__init__.py
+opencv_auto_source/auto_source.py
+opencv_auto_source.egg-info/PKG-INFO
+opencv_auto_source.egg-info/SOURCES.txt
+opencv_auto_source.egg-info/dependency_links.txt
+opencv_auto_source.egg-info/requires.txt
+opencv_auto_source.egg-info/top_level.txt
