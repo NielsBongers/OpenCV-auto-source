@@ -2,7 +2,7 @@
 
 ## Overview 
 
-OpenCV's `cv2.VideoCapture(source_id)` can be difficult to work with, particularly with multiple sources that are not all active (for example, DroidCam), with the order also randomly switching. OpenCV also doesn't always select the highest-resolution available. 
+OpenCV's webcam system `cv2.VideoCapture(source_id)` can be difficult to work with, particularly with multiple sources that are not all active (for example, DroidCam), with the order also randomly switching. OpenCV also doesn't always select the highest-resolution available. 
 
 This project includes some helpful tricks to help with that. It iterates over sources (0 - 9 by default), checks if they open, return images, whether those images are uniform (indicating an inactive source), and their resolution. It then ranks them based on whether they work, then by resolution. 
 
