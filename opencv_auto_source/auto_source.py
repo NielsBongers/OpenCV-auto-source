@@ -121,8 +121,3 @@ class autoSelectSource:
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, best_source["width"])
 
         return cap
-
-
-A = autoSelectSource().check_webcams()
-
-print(A)
