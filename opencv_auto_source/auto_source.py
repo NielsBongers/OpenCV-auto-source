@@ -5,7 +5,6 @@ import cv2
 import numpy as np
 import logging
 
-logging.basicConfig(level=logging.WARNING)
 logging.getLogger("opencv_auto_source").addHandler(logging.NullHandler())
 
 
@@ -71,7 +70,7 @@ class autoSelectSource:
                         check_results["exception"] = False
 
                 except Exception as e:
-                    received_exception = True
+                    logging.exception(f"Failed to read webcam, {e}")
                     check_results["exception"] = e
 
             try:
@@ -120,5 +119,10 @@ class autoSelectSource:
         cap = cv2.VideoCapture(best_source["id"])
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, best_source["height"])
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, best_source["width"])
+
+        logging.info(f"Selecting webcam {best_source['id']}")
+
+        if best_source["uniform color"]:
+            logging.warning(f"Webcam shows uniform color.")
 
         return cap
