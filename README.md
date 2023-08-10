@@ -52,4 +52,4 @@ This can also be written more compactly:
 The package can be built and installed using 
 
     py -m build --wheel
-    py -m pip install opencv_auto_source/dist/opencv_auto_source-0.1.0-py3-none-any.whl
+    py -m pip install opencv_auto_source/dist/opencv_auto_source-0.1.4-py3-none-any.whl
