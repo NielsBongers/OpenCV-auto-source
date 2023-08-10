@@ -41,6 +41,12 @@ Checks all sources, and returns an ```cv2.VideoCapture``` object with the maximu
     cap = checker.get_best_source() 
 ```
 
+This can also be written more compactly: 
+
+```python
+    cap = checkWebcam().get_best_source() 
+```
+
 ## Build and installation 
 
 The package can be built and installed using 
