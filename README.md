@@ -27,7 +27,7 @@ This function creates and returns a list containing a dictionary per checked sou
 
 ### Sorting
 
-Internally, this function calls the ```check_webcams()``` function, then returns the source with the highest resolution out of all working sources. 
+Internally, this function calls the ```check_webcams()``` function, then returns the source with the highest resolution out of all working sources. It also sorts a list with all the sources, under ```checker.ranking_results```, containing the rank as the first entry in the tuple, and the corresponding source's dictionary in the second. 
 
 ```python
     best_source = checker.rank_sources() 
@@ -35,10 +35,10 @@ Internally, this function calls the ```check_webcams()``` function, then returns
 
 ### Best source 
 
-Checks all sources, and returns an ```cv2.VideoCapture``` object with the maximum resolution available for the best source found, which can then be used by ```res, img = cap.read()```. 
+Checks all sources, and returns an ```cv2.VideoCapture``` object with the maximum resolution available for the best source found, which can then be used by ```res, img = cap.read()```. Optionally, the number of sources to return can be specified as well. In that case, it will return the top-$n$ sources from the ```rank_sources()``` function. 
 
 ```python
-    cap = checker.get_best_source() 
+    cap = checker.get_best_source(number_sources=2) 
 ```
 
 This can also be written more compactly: 
@@ -51,5 +51,5 @@ This can also be written more compactly:
 
 The package can be built and installed using 
 
-    py -m build --wheel
-    py -m pip install opencv_auto_source/dist/opencv_auto_source-0.1.4-py3-none-any.whl
+    python -m build --wheel
+    python -m pip install opencv_auto_source/dist/opencv_auto_source-0.2.1-py3-none-any.whl
