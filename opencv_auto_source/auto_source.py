@@ -1,9 +1,10 @@
 import os
 
 os.environ["OPENCV_LOG_LEVEL"] = "FATAL"
+import logging
+
 import cv2
 import numpy as np
-import logging
 
 logging.getLogger("opencv_auto_source").addHandler(logging.NullHandler())
 
@@ -11,7 +12,7 @@ logging.getLogger("opencv_auto_source").addHandler(logging.NullHandler())
 class autoSelectSource:
     """A class to check and rank available webcams."""
 
-    def __init__(self, MAX_SOURCE_COUNT=10):
+    def __init__(self, MAX_SOURCE_COUNT: int = 10):
         """Initializes the checkWebcam object with default values.
 
         Args:
@@ -20,6 +21,7 @@ class autoSelectSource:
         self.ATTEMPT_RESOLUTION = 10000
         self.MAX_SOURCE_COUNT = MAX_SOURCE_COUNT
         self.source_results = []
+        self.ranking_results = []
 
     def check_webcams(self) -> list:
         """Checks the availability and quality of each webcam source.
@@ -88,39 +90,52 @@ class autoSelectSource:
         """
         self.check_webcams()
 
-        maximum_rating = -1
+        maximum_rank = -1
         best_source = ""
 
         for source in self.source_results:
-            rating = 0
+            rank = 0
 
             if source["active"] and source["opens"]:
                 if not source["uniform color"]:
-                    rating = source["height"] * source["width"]
+                    rank = source["height"] * source["width"]
                 else:
-                    rating = 1
+                    rank = 1
 
-            if rating >= maximum_rating:
+            self.ranking_results.append((rank, source))
+
+            if rank >= maximum_rank:
                 best_source = source
-                maximum_rating = rating
+                maximum_rank = rank
+
+        self.ranking_results.sort(key=lambda rank: rank[0], reverse=True)
 
         return best_source
 
-    def get_best_source(self) -> cv2.VideoCapture:
+    def get_best_source(self, number_sources: int = 1) -> list:
         """Gets the best webcam source and opens it.
 
+        Args:
+            number_sources (int, optional): Number of sources to return. Defaults to 1.
+
         Returns:
-            cv2.VideoCapture: A cv2.VideoCapture object representing the best webcam source.
+            list: A list of cv2.VideoCapture objects representing the best webcam sources.
         """
-        best_source = self.rank_sources()
+        self.rank_sources()
+        selected_sources = self.ranking_results[0:number_sources]
 
-        cap = cv2.VideoCapture(best_source["id"])
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, best_source["height"])
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, best_source["width"])
+        return_caps = []
 
-        logging.info(f"Selecting webcam {best_source['id']}")
+        for rank, source in selected_sources:
+            cap = cv2.VideoCapture(source["id"])
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, source["height"])
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, source["width"])
 
-        if best_source["uniform color"]:
-            logging.warning(f"Webcam shows uniform color.")
+            logging.info(f"Selecting webcam {source['id']}")
 
-        return cap
+            if source["uniform color"]:
+                logging.warning(f"Webcam shows uniform color.")
+
+            return_caps.append(cap)
+
+        return return_caps
