@@ -1,1 +1,1 @@
-from .auto_source import autoSelectSource
+from .auto_source import autoSource
